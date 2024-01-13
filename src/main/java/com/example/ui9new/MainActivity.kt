@@ -74,7 +74,6 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "the Item is Exist", Toast.LENGTH_SHORT).show()
 
             getAdapter(db)
-            senddataToAPI()
         }
 
         update.setOnClickListener {
@@ -88,7 +87,6 @@ class MainActivity : AppCompatActivity() {
             } else
                 Toast.makeText(this, "the Item is not Exist", Toast.LENGTH_SHORT).show()
             getAdapter(db)
-            senddataToAPI()
         }
 
         del.setOnClickListener {
@@ -100,7 +98,6 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "the Item is not Exist", Toast.LENGTH_SHORT).show()
 
             getAdapter(db)
-            senddataToAPI()
         }
 
         search.setOnClickListener {
@@ -135,35 +132,5 @@ class MainActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    fun senddataToAPI() {
-        val db = DataBase(applicationContext)
-        val pcList = db.getAll()
-        val jsonArray = JSONArray()
-        // Convert data to JSON format
-        for (pc in pcList) {
-            val jsonObject = JSONObject()
-            jsonObject.put("id", pc.id)
-            jsonObject.put("name", pc.name)
-            jsonObject.put("prix", pc.prix)
-            jsonObject.put("image", pc.image)
-            jsonArray.put(jsonObject)
-        }
-
-        // Send data to API using Volley
-        val url = "https://run.mocky.io/v3/a6d24ef2-c50b-4f63-813b-447f1ac603fa"
-        val jsonArrayRequest = JsonArrayRequest(
-            Request.Method.POST, url, jsonArray,
-            Response.Listener { response ->
-            },
-            Response.ErrorListener { error ->
-                Log.e("VolleyError", "Error: ${error.message}", error)
-            })
-        // Add the request to the RequestQueue
-        Volley.newRequestQueue(this).add(jsonArrayRequest)
-    }
-
-    fun onItemClick(pc: Pc) {
-        Toast.makeText(this, "Clicked on item: ${pc.name}", Toast.LENGTH_SHORT).show()
-    }
 }
 
